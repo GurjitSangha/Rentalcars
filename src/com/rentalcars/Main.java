@@ -1,5 +1,6 @@
 package com.rentalcars;
 
+import com.rentalcars.compare.PriceComparator;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -7,6 +8,7 @@ import org.json.simple.parser.JSONParser;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 
 public class Main {
@@ -19,7 +21,7 @@ public class Main {
             System.out.println("Please specify the json file");
             System.exit(0);
         }
-        System.out.println("Loading data from " + args[0]);
+
         parseJsonFile(args[0]);
         sortByPrice();
 
@@ -61,6 +63,11 @@ public class Main {
     }
 
     private static void sortByPrice() {
-
+        // Sort the vehicle list and print it out
+        Collections.sort(vehicles, new PriceComparator());
+        System.out.println("Vehicles in ascending price order");
+        for (int i = 0; i < vehicles.size(); i++) {
+            System.out.printf("%2d. %s - %s\n", i+1, vehicles.get(i).getName(), vehicles.get(i).getPrice());
+        }
     }
 }

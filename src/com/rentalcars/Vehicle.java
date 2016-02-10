@@ -2,7 +2,7 @@ package com.rentalcars;
 
 /**
  * Class to represent a vehicle from the json file
- * Created by Gary on 10/02/16.
+ * Created by Gurjit on 10/02/16.
  */
 public class Vehicle {
 
