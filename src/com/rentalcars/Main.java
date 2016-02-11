@@ -1,11 +1,13 @@
 package com.rentalcars;
 
 import com.rentalcars.compare.PriceComparator;
+import com.rentalcars.compare.RatingComparator;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import java.io.FileReader;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -30,8 +32,9 @@ public class Main {
         setupHashMaps();
 
         parseJsonFile(args[0]);
-        sortByPrice();
-        specBySIPP();
+//        sortByPrice();
+//        specBySIPP();
+        sortSuppliersByCarType();
     }
 
     private static void parseJsonFile(String jsonFile) {
@@ -71,10 +74,11 @@ public class Main {
 
     private static void sortByPrice() {
         // Sort the vehicle list and print it out
-        Collections.sort(vehicles, new PriceComparator());
+        ArrayList<Vehicle> vehiclesCopy = copyList(vehicles);
+        Collections.sort(vehiclesCopy, new PriceComparator());
         System.out.println("Vehicles in ascending price order");
-        for (int i = 0; i < vehicles.size(); i++) {
-            System.out.printf("%2d. %s - %s\n", i+1, vehicles.get(i).getName(), vehicles.get(i).getPrice());
+        for (int i = 0; i < vehiclesCopy.size(); i++) {
+            System.out.printf("%2d. %s - %s\n", i+1, vehiclesCopy.get(i).getName(), vehiclesCopy.get(i).getPrice());
         }
     }
 
@@ -146,5 +150,35 @@ public class Main {
                 index, name, sipp, carType, doorsCarType, transmissionType, fuelACArray[0], fuelACArray[1]);
     }
 
+    private static void sortSuppliersByCarType() {
+        for (String key : carMap.keySet()) {
+            ArrayList<Vehicle> vehicleArrayList = getVehiclesForCarType(key);
+            if (vehicleArrayList.size() == 0)
+                continue;
 
+            Collections.sort(vehicleArrayList, new RatingComparator());
+            for (int i = 0; i < vehicleArrayList.size(); i++) {
+                Vehicle v = vehicleArrayList.get(i);
+                System.out.printf("%2d. %s - %s - %s - %s\n",
+                        i+1, v.getName(), carMap.get(key), v.getSupplier(), v.getRating());
+            }
+        }
+    }
+
+    private static ArrayList<Vehicle> getVehiclesForCarType(String carTypeKey) {
+        ArrayList<Vehicle> list = new ArrayList<>();
+        for (Vehicle vehicle : vehicles) {
+            String sipp = vehicle.getSipp();
+            if (sipp.substring(0,1).equals(carTypeKey))
+                list.add(vehicle);
+        }
+        return list;
+    }
+
+    private static ArrayList<Vehicle> copyList(ArrayList<Vehicle> list) {
+        ArrayList<Vehicle> copy = new ArrayList<>(list.size());
+        for(Vehicle v : list)
+            copy.add(v);
+        return copy;
+    }
 }

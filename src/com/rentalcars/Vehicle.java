@@ -4,7 +4,7 @@ package com.rentalcars;
  * Class to represent a vehicle from the json file
  * Created by Gurjit on 10/02/16.
  */
-public class Vehicle {
+public class Vehicle implements Cloneable{
 
     // Instance variables
     private String sipp;
