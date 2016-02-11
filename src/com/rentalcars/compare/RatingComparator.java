@@ -6,7 +6,7 @@ import java.util.Comparator;
 
 /**
  * Class to compare two vehicles by rating
- * Created by Gary on 11/02/16.
+ * Created by Gurjit on 11/02/16.
  */
 public class RatingComparator implements Comparator<Vehicle>{
     @Override

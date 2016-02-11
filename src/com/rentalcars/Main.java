@@ -2,6 +2,7 @@ package com.rentalcars;
 
 import com.rentalcars.compare.PriceComparator;
 import com.rentalcars.compare.RatingComparator;
+import com.rentalcars.compare.ScoreRatingComparator;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -34,8 +35,10 @@ public class Main {
         parseJsonFile(args[0]);
 //        sortByPrice();
 //        specBySIPP();
-        sortSuppliersByCarType();
+//        sortSuppliersByCarType();
+        sortByScore();
     }
+
 
     private static void parseJsonFile(String jsonFile) {
         // Parse the json file
@@ -78,7 +81,7 @@ public class Main {
         Collections.sort(vehiclesCopy, new PriceComparator());
         System.out.println("Vehicles in ascending price order");
         for (int i = 0; i < vehiclesCopy.size(); i++) {
-            System.out.printf("%2d. %s - %s\n", i+1, vehiclesCopy.get(i).getName(), vehiclesCopy.get(i).getPrice());
+            System.out.printf("%2d. %s - %s\n", i + 1, vehiclesCopy.get(i).getName(), vehiclesCopy.get(i).getPrice());
         }
     }
 
@@ -173,6 +176,39 @@ public class Main {
                 list.add(vehicle);
         }
         return list;
+    }
+
+    private static void sortByScore() {
+        // Get the score for each vehicle
+        ArrayList<Vehicle> vehiclesCopy = copyList(vehicles);
+        for (Vehicle v : vehiclesCopy) {
+            int score = getScoreForVehicle(v.getSipp());
+            v.setScore(score);
+        }
+
+        // Sort by combined score & rating
+        Collections.sort(vehiclesCopy, new ScoreRatingComparator());
+        for (int i = 0; i < vehiclesCopy.size(); i++) {
+            Vehicle v = vehiclesCopy.get(i);
+            System.out.printf("%2d. %s - %s - %s - %s\n",
+                    i+1, v.getName(), v.getScore(), v.getRating(), v.getScore() + v.getRating());
+        }
+    }
+
+    private static int getScoreForVehicle(String sipp) {
+        String transmission = sipp.substring(2,3);
+        String fuelAC = sipp.substring(3,4);
+        int total = 0;
+
+        if (transmission.equals("M"))
+            total += 1;
+        else if (transmission.equals("A"))
+            total += 5;
+
+        if (fuelAC.equals("R"))
+            total += 2;
+
+        return total;
     }
 
     private static ArrayList<Vehicle> copyList(ArrayList<Vehicle> list) {

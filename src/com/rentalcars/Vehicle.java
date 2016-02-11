@@ -13,6 +13,8 @@ public class Vehicle implements Cloneable{
     private String supplier;
     private double rating;
 
+    private int score;
+
     // Constructor
     public Vehicle(String sipp, String name, double price, String supplier, double rating) {
         this.sipp = sipp;
@@ -20,6 +22,7 @@ public class Vehicle implements Cloneable{
         this.price = price;
         this.supplier = supplier;
         this.rating = rating;
+        this.score = 0;
     }
 
     // Getters and setters
@@ -64,6 +67,14 @@ public class Vehicle implements Cloneable{
         this.rating = rating;
     }
 
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
     // toString for debugging
 
     @Override
@@ -74,6 +85,7 @@ public class Vehicle implements Cloneable{
                 ", price=" + price +
                 ", supplier='" + supplier + '\'' +
                 ", rating=" + rating +
+                ", score=" + score +
                 '}';
     }
 }
