@@ -27,4 +27,11 @@ public class SIPPVehicle extends Transport {
     public String toString() {
         return name + " - " + sipp + " - " + carType + " - " + doorsType + " - " + transmission + " - " + fuel + " - " + aircon;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        SIPPVehicle other = (SIPPVehicle) obj;
+        return this.name.equals(other.name) && this.carType.equals(other.carType) && this.doorsType.equals(other.doorsType) &&
+                this.transmission.equals(other.transmission) && this.fuel.equals(other.fuel) && this.aircon.equals(other.aircon);
+    }
 }
